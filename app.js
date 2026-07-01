@@ -100,16 +100,41 @@ let state = {
 
 /* ================================================================
    FIRESTORE LOAD / SAVE
+   Firestore does not support nested arrays (array of arrays).
+   habitData is [[1,0,...],[0,1,...]] so we serialize it to a plain
+   object { "r0": "10110100", "r1": "11011100", ... } before saving
+   and deserialize it back after loading.
 ================================================================ */
+function serializeState(s) {
+  const out = { ...s };
+  // Convert habitData: array of arrays → object of strings
+  const hd = {};
+  (s.habitData || []).forEach((row, i) => { hd['r' + i] = row.join(''); });
+  out.habitData = hd;
+  return out;
+}
+
+function deserializeState(data) {
+  const out = { ...data };
+  // Convert habitData back: object of strings → array of arrays
+  if (data.habitData && !Array.isArray(data.habitData)) {
+    const keys = Object.keys(data.habitData).sort((a,b) => {
+      return parseInt(a.slice(1)) - parseInt(b.slice(1));
+    });
+    out.habitData = keys.map(k => data.habitData[k].split('').map(Number));
+  }
+  return out;
+}
+
 async function loadUserData() {
   try {
     const ref = doc(db, 'users', currentUser.uid);
     const snap = await getDoc(ref);
     if (snap.exists()) {
-      const data = snap.data();
+      const data = deserializeState(snap.data());
       state = { ...state, ...data };
     } else {
-      await setDoc(ref, state);
+      await setDoc(ref, serializeState(state));
     }
     dataLoaded = true;
   } catch (err) {
@@ -126,7 +151,7 @@ function scheduleSave() {
   saveTimer = setTimeout(async () => {
     try {
       const ref = doc(db, 'users', currentUser.uid);
-      await setDoc(ref, state);
+      await setDoc(ref, serializeState(state));
       setSyncStatus('ok', 'Saved');
     } catch (err) {
       console.error('Save failed:', err);
