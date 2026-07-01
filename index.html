@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tracker</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ===================== LOGIN SCREEN ===================== -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">📁</div>
+    <h1>Tracker</h1>
+    <p>Sign in to sync your habits, workouts, and expenses across all devices.</p>
+    <button class="google-btn" id="googleSignInBtn">
+      <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.2l6.8-6.8C35.8 2.3 30.3 0 24 0 14.8 0 6.9 5.3 3 13l7.9 6.1C12.9 13 18 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h12.7c-.6 3-2.3 5.5-4.9 7.2l7.7 6c4.5-4.2 7-10.3 7-17.2z"/><path fill="#FBBC05" d="M10.9 28.6A14.6 14.6 0 0 1 9.5 24c0-1.6.3-3.2.8-4.6L2.4 13.3A23.9 23.9 0 0 0 0 24c0 3.8.9 7.4 2.5 10.6l8.4-6z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.7-6c-2.1 1.4-4.8 2.3-8.2 2.3-6.1 0-11.2-4.1-13-9.7l-8.1 6.2C6.8 43 14.8 48 24 48z"/></svg>
+      Continue with Google
+    </button>
+    <div class="login-error" id="loginError"></div>
+    <div style="display:flex;justify-content:center;margin-top:10px;">
+      <div class="spinner" id="loginSpinner"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== APP ROOT ===================== -->
+<div id="appRoot" class="app">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="ws-title">📁 Tracker</div>
+
+    <div class="nav-section-label">Track</div>
+    <div class="nav-item active" data-page="habits"><span class="ic">🔥</span> My Habit Tracker</div>
+    <div class="nav-item" data-page="exercise"><span class="ic">💪</span> Exercise Planner</div>
+    <div class="nav-item" data-page="expenses"><span class="ic">💰</span> Expense Tracker</div>
+
+    <div class="sidebar-bottom">
+      <div id="syncStatus"><span class="dot"></span>All saved</div>
+      <div class="user-card" id="userCard"></div>
+      <div class="signout-btn" id="signoutBtn">Sign out</div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <div class="topbar">
+      <div class="crumbs" id="crumbs">
+        <span>🔥 My Habit Tracker</span><span class="sep">/</span><span>This month</span>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <!-- ============================================================ -->
+      <!-- PAGE 1: HABIT TRACKER                                         -->
+      <!-- ============================================================ -->
+      <div class="page active" id="page-habits">
+        <h1 class="title">📝 My Habits</h1>
+
+        <table id="habitTable">
+          <thead>
+            <tr>
+              <th class="habit-col"></th>
+              <th class="open-col" title="Delete row"></th>
+              <th class="date-col">📅 1st</th>
+              <th class="date-col">📅 2nd</th>
+              <th class="date-col">📅 3rd</th>
+              <th class="date-col">📅 4th</th>
+              <th class="date-col">📅 5th</th>
+              <th class="date-col">📅 6th</th>
+              <th class="date-col">📅 7th</th>
+              <th class="date-col">📅 8th</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <div class="new-page-row" id="addHabitRow">+ New habit</div>
+
+        <div class="progress-section">
+          <div class="progress-header">
+            <div class="progress-title">▾ Monthly Progress</div>
+            <div class="view-tabs">
+              <span>🕐 Chart</span><span>📅 Calendar</span><span class="active">▪ Table</span>
+            </div>
+          </div>
+          <div class="goal-row">
+            <span class="goal-text" id="goalText">Goal : 80 %</span>
+            <div class="controls">
+              <button class="btn secondary small" id="editGoalBtn">✏️ Edit Goal</button>
+            </div>
+          </div>
+          <div class="charts-row">
+            <div class="donut-wrap">
+              <span class="donut-callout" id="donutCallout">0%</span>
+              <svg width="160" height="160" viewBox="0 0 160 160">
+                <circle cx="80" cy="80" r="68" fill="none" stroke="#f1c265" stroke-width="14"/>
+                <circle id="progressArc" cx="80" cy="80" r="68" fill="none" stroke="#2383e2" stroke-width="14"
+                  stroke-dasharray="0 427" transform="rotate(-90 80 80)"/>
+              </svg>
+              <div class="donut-label">
+                <div class="pct" id="progressPct">0%</div>
+                <div class="sub">Completion</div>
+              </div>
+            </div>
+            <div class="linechart">
+              <svg width="100%" height="220" viewBox="0 0 480 220" preserveAspectRatio="none">
+                <g stroke="#eee" stroke-width="1">
+                  <line x1="40" y1="20" x2="470" y2="20"/>
+                  <line x1="40" y1="60" x2="470" y2="60"/>
+                  <line x1="40" y1="100" x2="470" y2="100"/>
+                  <line x1="40" y1="140" x2="470" y2="140"/>
+                  <line x1="40" y1="180" x2="470" y2="180"/>
+                </g>
+                <g fill="#9b9a97" font-size="11">
+                  <text x="0" y="24">80%</text><text x="0" y="64">60%</text>
+                  <text x="0" y="104">40%</text><text x="0" y="144">20%</text>
+                </g>
+                <polyline fill="none" stroke="#2383e2" stroke-width="1.5"
+                  points="60,130 150,52 240,124 330,124 420,196"/>
+                <g font-size="11" fill="#9b9a97">
+                  <circle cx="60" cy="130" r="2.5" fill="#2383e2"/><text x="48" y="148">38%</text>
+                  <circle cx="150" cy="52" r="2.5" fill="#2383e2"/><text x="138" y="44">75%</text>
+                  <circle cx="240" cy="124" r="2.5" fill="#2383e2"/><text x="228" y="142">38%</text>
+                  <circle cx="330" cy="124" r="2.5" fill="#2383e2"/>
+                  <circle cx="420" cy="196" r="2.5" fill="#2383e2"/><text x="408" y="212">13%</text>
+                </g>
+                <line x1="40" y1="200" x2="470" y2="200" stroke="#37352f" stroke-width="2"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- PAGE 2: EXERCISE PLANNER                                      -->
+      <!-- ============================================================ -->
+      <div class="page" id="page-exercise">
+        <h1 class="title">💪 Exercise Planner</h1>
+        <p class="helper">Plan your weekly split, then track sets, reps and weight for each session.</p>
+
+        <h2 class="subhead">📅 Weekly Split Overview</h2>
+        <div class="week-grid" id="weekGrid"></div>
+
+        <h2 class="subhead">🏃 Workout Days</h2>
+        <div id="dayCards"></div>
+
+        <div class="add-day-wrap">
+          <button class="btn" id="addDayBtn">+ Add workout day</button>
+        </div>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- PAGE 3: EXPENSE TRACKER                                       -->
+      <!-- ============================================================ -->
+      <div class="page" id="page-expenses">
+        <h1 class="title">💰 Expense Tracker &amp; Planner</h1>
+        <p class="helper">Set your monthly income, allocate a budget, then log expenses to see how you're tracking.</p>
+
+        <div class="income-row">
+          <label>Monthly Income (₹/$):</label>
+          <input type="number" id="incomeInput" placeholder="e.g. 50000" min="0">
+          <button class="btn" id="setIncomeBtn">Save</button>
+        </div>
+
+        <div class="summary-cards">
+          <div class="stat-card income"><div class="label">Monthly Income</div><div class="value" id="statIncome">0</div></div>
+          <div class="stat-card spent"><div class="label">Total Spent</div><div class="value" id="statSpent">0</div></div>
+          <div class="stat-card remaining"><div class="label">Remaining</div><div class="value" id="statRemaining">0</div></div>
+          <div class="stat-card savings"><div class="label">Allocated to Savings</div><div class="value" id="statSavings">0</div></div>
+        </div>
+
+        <h2 class="subhead">📊 Monthly Budget Plan</h2>
+        <p class="helper">Default split follows the 50/30/20 rule — edit % per category to match your goals.</p>
+        <table class="budget-table">
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th class="col-pct">% of Income</th>
+              <th class="col-amt">Budgeted</th>
+              <th class="col-spent">Spent</th>
+              <th class="col-left">Remaining</th>
+              <th style="width:6%"></th>
+            </tr>
+          </thead>
+          <tbody id="budgetBody"></tbody>
+        </table>
+        <div class="pct-total-note" id="pctNote"></div>
+        <div style="margin-top:10px;">
+          <button class="btn secondary small" id="addBudgetCatBtn">+ Add category</button>
+        </div>
+
+        <h2 class="subhead">📝 Log an Expense</h2>
+        <div class="expense-form">
+          <div class="field"><label>Date</label><input type="date" id="expDate"></div>
+          <div class="field"><label>Category</label><select id="expCategory"></select></div>
+          <div class="field"><label>Description</label><input type="text" id="expDesc" placeholder="e.g. Groceries"></div>
+          <div class="field"><label>Amount</label><input type="number" id="expAmount" placeholder="0" min="0"></div>
+          <button class="btn" id="addExpenseBtn">+ Add expense</button>
+        </div>
+
+        <table class="expense-table">
+          <thead>
+            <tr>
+              <th style="width:14%">Date</th>
+              <th style="width:18%">Category</th>
+              <th>Description</th>
+              <th style="width:14%">Amount</th>
+              <th style="width:8%"></th>
+            </tr>
+          </thead>
+          <tbody id="expenseBody"></tbody>
+        </table>
+        <div class="empty-state" id="expenseEmpty" style="display:none;">
+          No expenses logged yet. Add your first one above.
+        </div>
+      </div>
+
+    </div><!-- /container -->
+  </div><!-- /main -->
+</div><!-- /appRoot -->
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
