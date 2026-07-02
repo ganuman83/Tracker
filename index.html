@@ -4,6 +4,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tracker</title>
+
+<!-- PWA -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1e2952">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Tracker">
+
+<!-- Icons -->
+<link rel="icon" type="image/png" sizes="32x32" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="shortcut icon" href="favicon.ico">
+
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -201,5 +215,43 @@
 </div><!-- /appRoot -->
 
 <script type="module" src="app.js"></script>
+
+<!-- Service Worker Registration -->
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js')
+        .then(reg => {
+          console.log('[PWA] Service Worker registered. Scope:', reg.scope);
+
+          // When a new SW is waiting (after a CACHE_VERSION bump),
+          // notify the user and reload to activate the new version.
+          reg.addEventListener('updatefound', () => {
+            const newWorker = reg.installing;
+            newWorker.addEventListener('statechange', () => {
+              if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                // New version available — show a subtle banner
+                const banner = document.createElement('div');
+                banner.style.cssText = `
+                  position:fixed; bottom:16px; left:50%; transform:translateX(-50%);
+                  background:#1e2952; color:#fff; padding:10px 20px; border-radius:8px;
+                  font-size:13px; z-index:9999; display:flex; align-items:center; gap:12px;
+                  box-shadow:0 4px 16px rgba(0,0,0,0.2);
+                `;
+                banner.innerHTML = `
+                  <span>🔄 New version available!</span>
+                  <button onclick="window.location.reload()" style="
+                    background:#2383e2; color:#fff; border:none; padding:4px 12px;
+                    border-radius:4px; cursor:pointer; font-size:12px; font-weight:600;
+                  ">Update now</button>`;
+                document.body.appendChild(banner);
+              }
+            });
+          });
+        })
+        .catch(err => console.error('[PWA] SW registration failed:', err));
+    });
+  }
+</script>
 </body>
 </html>
