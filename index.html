@@ -60,76 +60,53 @@
       <!-- ============================================================ -->
       <div class="page active" id="page-habits">
         <h1 class="title">📝 My Habits</h1>
+        <p class="helper">Showing last 3 days · today · next 6 days. Click any past cell to toggle.</p>
 
-        <table id="habitTable">
-          <thead>
-            <tr>
-              <th class="habit-col"></th>
-              <th class="open-col" title="Delete row"></th>
-              <th class="date-col">📅 1st</th>
-              <th class="date-col">📅 2nd</th>
-              <th class="date-col">📅 3rd</th>
-              <th class="date-col">📅 4th</th>
-              <th class="date-col">📅 5th</th>
-              <th class="date-col">📅 6th</th>
-              <th class="date-col">📅 7th</th>
-              <th class="date-col">📅 8th</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+        <div style="overflow-x:auto;">
+          <table id="habitTable">
+            <thead></thead>
+            <tbody></tbody>
+          </table>
+        </div>
         <div class="new-page-row" id="addHabitRow">+ New habit</div>
 
         <div class="progress-section">
           <div class="progress-header">
             <div class="progress-title">▾ Monthly Progress</div>
-            <div class="view-tabs">
-              <span>🕐 Chart</span><span>📅 Calendar</span><span class="active">▪ Table</span>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <select id="progressMonthSel" style="font-size:13px;padding:4px 8px;border-radius:4px;"></select>
             </div>
           </div>
           <div class="goal-row">
-            <span class="goal-text" id="goalText">Goal : 80 %</span>
+            <span class="goal-text" id="goalText">Goal : 80%</span>
             <div class="controls">
               <button class="btn secondary small" id="editGoalBtn">✏️ Edit Goal</button>
             </div>
           </div>
+
+          <div class="progress-legend">
+            <span class="legend-item"><span class="legend-dot" style="background:#2f9e6f"></span>≥ Goal</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#2383e2"></span>Today</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#93c5fd"></span>Below goal</span>
+            <span class="legend-item"><span style="display:inline-block;width:18px;border-top:2px dashed #e8a83c;vertical-align:middle;"></span> Goal line</span>
+          </div>
+
           <div class="charts-row">
             <div class="donut-wrap">
               <span class="donut-callout" id="donutCallout">0%</span>
               <svg width="160" height="160" viewBox="0 0 160 160">
-                <circle cx="80" cy="80" r="68" fill="none" stroke="#f1c265" stroke-width="14"/>
+                <circle cx="80" cy="80" r="68" fill="none" stroke="#f1f1ef" stroke-width="14"/>
                 <circle id="progressArc" cx="80" cy="80" r="68" fill="none" stroke="#2383e2" stroke-width="14"
-                  stroke-dasharray="0 427" transform="rotate(-90 80 80)"/>
+                  stroke-dasharray="0 427" transform="rotate(-90 80 80)" style="transition:stroke-dasharray .4s ease"/>
               </svg>
               <div class="donut-label">
                 <div class="pct" id="progressPct">0%</div>
-                <div class="sub">Completion</div>
+                <div class="sub">This month</div>
               </div>
             </div>
             <div class="linechart">
-              <svg width="100%" height="220" viewBox="0 0 480 220" preserveAspectRatio="none">
-                <g stroke="#eee" stroke-width="1">
-                  <line x1="40" y1="20" x2="470" y2="20"/>
-                  <line x1="40" y1="60" x2="470" y2="60"/>
-                  <line x1="40" y1="100" x2="470" y2="100"/>
-                  <line x1="40" y1="140" x2="470" y2="140"/>
-                  <line x1="40" y1="180" x2="470" y2="180"/>
-                </g>
-                <g fill="#9b9a97" font-size="11">
-                  <text x="0" y="24">80%</text><text x="0" y="64">60%</text>
-                  <text x="0" y="104">40%</text><text x="0" y="144">20%</text>
-                </g>
-                <polyline fill="none" stroke="#2383e2" stroke-width="1.5"
-                  points="60,130 150,52 240,124 330,124 420,196"/>
-                <g font-size="11" fill="#9b9a97">
-                  <circle cx="60" cy="130" r="2.5" fill="#2383e2"/><text x="48" y="148">38%</text>
-                  <circle cx="150" cy="52" r="2.5" fill="#2383e2"/><text x="138" y="44">75%</text>
-                  <circle cx="240" cy="124" r="2.5" fill="#2383e2"/><text x="228" y="142">38%</text>
-                  <circle cx="330" cy="124" r="2.5" fill="#2383e2"/>
-                  <circle cx="420" cy="196" r="2.5" fill="#2383e2"/><text x="408" y="212">13%</text>
-                </g>
-                <line x1="40" y1="200" x2="470" y2="200" stroke="#37352f" stroke-width="2"/>
-              </svg>
+              <p style="font-size:12px;color:var(--muted);margin:0 0 6px 0;">Daily completion % — last 10 days of selected month</p>
+              <svg id="habitBarChart" width="100%" height="200" viewBox="0 0 480 200" preserveAspectRatio="xMidYMid meet"></svg>
             </div>
           </div>
         </div>
