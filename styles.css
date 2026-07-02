@@ -154,25 +154,31 @@ td.check-cell{text-align:center; cursor:pointer; user-select:none;}
 
 /* ============ HABIT TRACKER ============ */
 th.habit-col, td.habit-cell{width:170px;}
-th.open-col, td.open-cell{width:55px; text-align:center; color:var(--muted); font-size:11px; cursor:pointer;}
-th.date-col{width:50px; text-align:center;}
+th.open-col, td.open-cell{width:38px; text-align:center; color:var(--muted); font-size:11px; cursor:pointer;}
+th.date-col{width:64px; text-align:center; font-size:12px;}
+th.today-col{background:#eef3fb; color:var(--blue); font-weight:700;}
+td.today-cell{background:#f5f9fe;}
 .habit-name{display:flex; align-items:center; gap:8px;}
+.checkbox.future{opacity:0.25; cursor:not-allowed;}
+
 .progress-section{margin-top:36px;}
-.progress-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.progress-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;}
 .progress-title{display:flex;align-items:center;gap:6px;font-weight:600;font-size:15px;text-decoration:underline;text-underline-offset:3px;}
-.view-tabs{display:flex;gap:18px;color:var(--muted);font-size:13px;}
-.view-tabs span{display:flex;align-items:center;gap:5px;}
-.view-tabs span.active{color:var(--text);font-weight:500;}
-.goal-row{display:flex;align-items:center;gap:14px;margin-bottom:16px;}
+.goal-row{display:flex;align-items:center;gap:14px;margin-bottom:10px;}
 .goal-row .goal-text{font-weight:600;font-size:15px;text-decoration:underline;text-underline-offset:3px;}
 .goal-row .controls{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:13px;}
-.charts-row{display:flex; gap:40px; align-items:center; flex-wrap:wrap;}
+
+.progress-legend{display:flex;align-items:center;gap:16px;margin-bottom:14px;flex-wrap:wrap;}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--muted);}
+.legend-dot{width:10px;height:10px;border-radius:2px;display:inline-block;}
+
+.charts-row{display:flex; gap:40px; align-items:flex-start; flex-wrap:wrap;}
 .donut-wrap{position:relative; width:160px; height:160px; flex-shrink:0;}
 .donut-label{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;}
 .donut-label .pct{font-size:24px;font-weight:600;}
 .donut-label .sub{font-size:11px;color:var(--muted);}
 .donut-callout{position:absolute; top:-6px; right:18px; font-size:11px; color:var(--muted);}
-.linechart{flex:1; min-width:280px;}
+.linechart{flex:1; min-width:300px;}
 
 /* ============ EXERCISE PLANNER ============ */
 .week-grid{display:grid; grid-template-columns:repeat(7,1fr); gap:8px; margin-bottom:30px;}
